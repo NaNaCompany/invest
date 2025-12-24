@@ -53,8 +53,10 @@ body::before {
     position: sticky;
     top: 0;
     left: 0;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
+    width: 100%;
+    /* Changed from 100vw to avoid scrollbar overlap */
+    margin-left: 0;
+    /* Removed neg margin hack as it is direct body child */
     background: rgba(13, 14, 18, 0.95);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--card-border);
@@ -161,6 +163,152 @@ body::before {
 @media (max-width: 768px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Scaling Typography for Mobile */
+    body {
+        font-size: 13px;
+        /* Reduced further from 14px */
+    }
+
+    h1 {
+        font-size: 18px !important;
+        /* Reduced from 20px */
+    }
+
+    h2 {
+        font-size: 16px !important;
+        /* Reduced from 18px */
+    }
+
+    .market-card,
+    .card {
+        max-width: 100%;
+        width: 100%;
+        overflow-x: hidden;
+        /* Prevent internal content from pushing width */
+    }
+
+    /* Mobile Logo Constraint */
+    .logo-image {
+        max-width: 35vw;
+        height: auto;
+    }
+
+    /* Mobile Header Layout - Fixed */
+    .sticky-content-wrapper {
+        display: grid !important;
+        grid-template-columns: 1fr auto !important;
+        grid-template-rows: auto auto !important;
+        gap: 12px !important;
+        align-items: center !important;
+    }
+
+    .header-right-section {
+        display: contents !important;
+    }
+
+    .logo-container {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+    }
+
+    #login-btn {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+    }
+
+    .top-status-bar {
+        grid-column: 1 / 3;
+        grid-row: 2 / 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 4px;
+        display: flex;
+    }
+
+    /* Mobile Tab Navigation */
+    .tab-navigation {
+        overflow-x: auto;
+        white-space: nowrap;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding-bottom: 5px;
+        /* Space for scrollbar if visible */
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scrolling on iOS */
+    }
+
+    .tab-navigation::-webkit-scrollbar {
+        display: none;
+        /* Hide scrollbar for cleaner look */
+    }
+
+    /* Mobile Search Section */
+    .search-container {
+        flex-direction: column;
+    }
+
+    #exchange-select,
+    #stock-code,
+    #search-btn {
+        width: 100%;
+    }
+
+    /* Mobile Portfolio List */
+    .portfolio-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .item-controls {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 8px;
+    }
+
+    .portfolio-header {
+        display: none;
+        /* Hide header on mobile as layout changes */
+    }
+
+    /* Mobile Stats */
+    #portfolio-stats {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .stat-item {
+        width: 100%;
+        border-bottom: 1px solid var(--card-border);
+        padding-bottom: 15px;
+    }
+
+    .stat-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .chart-controls-wrapper {
+        justify-content: center;
+    }
+
+    .chart-controls {
+        justify-content: center;
+    }
+
+    .price-action-container {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+
+    .price-info {
+        text-align: left;
     }
 }
 

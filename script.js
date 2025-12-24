@@ -1440,7 +1440,24 @@ async function analyzePortfolio(range = '5y') {
         stockResultsRaw.forEach(res => {
             if (res) res.timestamp.forEach(t => allDatesSet.add(ymd(t)));
         });
-        const sortedDates = Array.from(allDatesSet).sort();
+
+        // Original Sorted Union Dates
+        let fullSortedDates = Array.from(allDatesSet).sort();
+
+        // [Mod] Filter to Common Start Date (Logic to fix "Starts at 0")
+        // Find the LATEST start date among all assets
+        let maxStartTimestamp = 0;
+        stockResultsRaw.forEach(res => {
+            if (res && res.timestamp && res.timestamp.length > 0) {
+                if (res.timestamp[0] > maxStartTimestamp) maxStartTimestamp = res.timestamp[0];
+            }
+        });
+
+        // Convert to YYYY-MM-DD
+        const commonStartDate = ymd(maxStartTimestamp);
+
+        // Filter dates to only include those after commonStartDate
+        const sortedDates = fullSortedDates.filter(d => d >= commonStartDate);
 
         // 4. Calculate Portfolio Value
         const portfolioValues = [];
@@ -1666,6 +1683,10 @@ async function analyzePortfolio(range = '5y') {
                             height = chart.height,
                             ctx = chart.ctx;
 
+                        const { top, left, width: chartWidth, height: chartHeight } = chart.chartArea;
+                        const centerX = left + chartWidth / 2;
+                        const centerY = top + chartHeight / 2;
+
                         ctx.restore();
                         // Drastically reduced font size (div 300)
                         const fontSize = (height / 300).toFixed(2);
@@ -1682,16 +1703,16 @@ async function analyzePortfolio(range = '5y') {
                         }
 
                         const text = totalText,
-                            textX = Math.round((width - ctx.measureText(text).width) / 2),
-                            textY = height / 2.3;
+                            textX = Math.round(centerX - ctx.measureText(text).width / 2),
+                            textY = centerY;
 
                         ctx.fillText(text, textX, textY);
 
                         ctx.font = `normal ${(height / 450).toFixed(2)}em sans-serif`;
                         const subText = '원';
-                        const subX = Math.round((width - ctx.measureText(subText).width) / 2);
+                        const subX = Math.round(centerX - ctx.measureText(subText).width / 2);
                         ctx.fillStyle = "#9ca3af";
-                        ctx.fillText(subText, subX, textY + 20);
+                        ctx.fillText(subText, subX, textY + 20); // Slightly below center
 
                         ctx.save();
                     }

@@ -98,8 +98,7 @@ async function fetchYahooData(symbol, range, interval, timeout = 10000) {
     const encodedUrl = encodeURIComponent(rawUrl);
 
     const proxies = [
-        `https://api.allorigins.win/raw?url=${encodedUrl}`,
-        `https://corsproxy.io/?url=${encodedUrl}`
+        `http://168.107.56.28/proxy?query=${encodedUrl}`
     ];
 
     // Create a promise to store in cache immediately (request deduplication)

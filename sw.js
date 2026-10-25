@@ -1,4 +1,4 @@
-const CACHE_NAME = 'invest-ai-v1';
+const CACHE_NAME = 'invest-ai-v2-more-apps';
 const urlsToCache = [
   './',
   './index.html',

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'invest-ai-v2-more-apps';
+const CACHE_NAME = 'invest-ai-v3-publisher-tags-20261028';
 const urlsToCache = [
   './',
   './index.html',
@@ -20,7 +20,7 @@ self.addEventListener('install', event => {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
+    caches.open(CACHE_NAME).then(cache => cache.match(event.request))
       .then(response => {
         if (response) {
           return response;
@@ -36,7 +36,7 @@ self.addEventListener('activate', event => {
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
+          if (cacheName.startsWith('invest-ai-') && cacheWhitelist.indexOf(cacheName) === -1) {
             return caches.delete(cacheName);
           }
         })
